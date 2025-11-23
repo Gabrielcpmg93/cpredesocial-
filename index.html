@@ -6,6 +6,9 @@
     <title>Lumina Social</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+      // Polyfill process global to prevent ReferenceErrors in browser environments
+      window.process = window.process || { env: {} };
+
       tailwind.config = {
         theme: {
           extend: {

@@ -1,9 +1,17 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Helper to initialize the AI client lazily.
+// Helper to initialize the AI client lazily and safely.
 // This prevents crashing the app on load if process.env is accessed at the module top-level.
 const getAiClient = () => {
-  const apiKey = process.env.API_KEY || '';
+  let apiKey = '';
+  try {
+    // Safely check if process is defined before accessing it
+    if (typeof process !== 'undefined' && process.env) {
+      apiKey = process.env.API_KEY || '';
+    }
+  } catch (error) {
+    console.warn("Environment variable access failed, using empty key.");
+  }
   return new GoogleGenAI({ apiKey });
 };
 
