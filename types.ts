@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface User {
   id: string;
   username: string;
@@ -31,10 +29,4 @@ export enum ViewState {
   FEED = 'FEED',
   PROFILE = 'PROFILE',
   CREATE = 'CREATE' // Modal overlay
-}
-
-export interface NavItem {
-  id: ViewState;
-  label: string;
-  icon: React.ReactNode;
 }

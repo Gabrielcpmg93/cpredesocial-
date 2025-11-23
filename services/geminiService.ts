@@ -1,15 +1,18 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+// Helper to initialize the AI client lazily.
+// This prevents crashing the app on load if process.env is accessed at the module top-level.
+const getAiClient = () => {
+  const apiKey = process.env.API_KEY || '';
+  return new GoogleGenAI({ apiKey });
+};
 
 /**
  * Generates a creative caption based on a short user description or keywords.
  */
 export const generateCreativeCaption = async (context: string, mood: string): Promise<string> => {
-  if (!apiKey) return "AI Caption unavailable (Missing API Key).";
-
   try {
+    const ai = getAiClient();
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: `Write a short, engaging, and artistic social media caption based on this context: "${context}". 
@@ -26,9 +29,8 @@ export const generateCreativeCaption = async (context: string, mood: string): Pr
  * Analyzes an image (Base64) and generates a description/caption.
  */
 export const analyzeImageAndCaption = async (base64Image: string): Promise<string> => {
-  if (!apiKey) return "AI Analysis unavailable (Missing API Key).";
-
   try {
+    const ai = getAiClient();
     // Remove data URL prefix if present for the API call
     const base64Data = base64Image.split(',')[1]; 
 
