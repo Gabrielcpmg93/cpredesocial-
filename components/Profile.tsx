@@ -1,7 +1,6 @@
 import React from 'react';
 import { User, Post } from '../types';
 import { PostCard } from './PostCard';
-import { ResponsiveContainer, AreaChart, Area, XAxis, Tooltip, CartesianGrid } from 'recharts';
 import { Settings, MapPin, Link as LinkIcon } from 'lucide-react';
 import { Button } from './Button';
 
@@ -10,18 +9,19 @@ interface ProfileProps {
   posts: Post[];
 }
 
-const data = [
-  { name: 'Mon', engagement: 400 },
-  { name: 'Tue', engagement: 300 },
-  { name: 'Wed', engagement: 550 },
-  { name: 'Thu', engagement: 450 },
-  { name: 'Fri', engagement: 600 },
-  { name: 'Sat', engagement: 800 },
-  { name: 'Sun', engagement: 750 },
-];
-
 export const Profile: React.FC<ProfileProps> = ({ user, posts }) => {
   const userPosts = posts.filter(p => p.userId === user.id);
+
+  // Mock data for the visualization
+  const weeklyStats = [
+    { day: 'Mon', value: 40, label: '400' },
+    { day: 'Tue', value: 30, label: '300' },
+    { day: 'Wed', value: 55, label: '550' },
+    { day: 'Thu', value: 45, label: '450' },
+    { day: 'Fri', value: 60, label: '600' },
+    { day: 'Sat', value: 80, label: '800' },
+    { day: 'Sun', value: 75, label: '750' },
+  ];
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8 animate-fade-in">
@@ -70,27 +70,25 @@ export const Profile: React.FC<ProfileProps> = ({ user, posts }) => {
         </div>
       </div>
 
-      {/* Analytics Section */}
+      {/* Analytics Section (CSS Only) */}
       <div className="mb-12 bg-lumina-card/50 rounded-2xl p-6 border border-white/5">
         <h3 className="text-lg font-semibold text-white mb-6">Weekly Engagement</h3>
-        <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data}>
-              <defs>
-                <linearGradient id="colorEngage" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4}/>
-                  <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.5} />
-              <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', borderRadius: '8px', color: '#fff' }}
-                itemStyle={{ color: '#a78bfa' }}
-              />
-              <Area type="monotone" dataKey="engagement" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorEngage)" />
-            </AreaChart>
-          </ResponsiveContainer>
+        <div className="h-48 w-full flex items-end justify-between gap-2 md:gap-4 px-2">
+          {weeklyStats.map((stat, index) => (
+            <div key={index} className="flex flex-col items-center gap-2 flex-1 group cursor-default">
+              <div className="relative w-full bg-white/5 rounded-t-lg hover:bg-violet-500/20 transition-all duration-300 flex items-end justify-center overflow-hidden" style={{ height: '100%' }}>
+                <div 
+                  className="w-full bg-gradient-to-t from-violet-600 to-indigo-500 opacity-80 group-hover:opacity-100 transition-opacity"
+                  style={{ height: `${stat.value}%` }}
+                ></div>
+                {/* Tooltip */}
+                <div className="absolute -top-8 bg-lumina-card border border-white/10 px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                  {stat.label} views
+                </div>
+              </div>
+              <span className="text-xs text-lumina-muted">{stat.day}</span>
+            </div>
+          ))}
         </div>
       </div>
 
