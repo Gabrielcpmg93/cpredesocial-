@@ -1,0 +1,8 @@
+{
+  "name": "Lumina",
+  "description": "A visually stunning, masonry-style social network focused on aesthetics and AI-enhanced storytelling.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
